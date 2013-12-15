@@ -1,0 +1,111 @@
+#include<iostream>
+#include<ctime>
+#include <limits>
+#include <cmath>
+#include <boost/timer/timer.hpp>
+using namespace boost::timer;
+using namespace std;
+
+void merge(int *a,int p,int q,int r)//归并哨兵法
+{
+	int Ln=q-p+1;
+	int Rn=r-q;
+
+	int *La=new int[Ln+1];
+	int *Ra=new int[Rn+1];
+	for(int i=0;i<Ln;++i){
+		La[i]=a[i+p];
+	}
+	La[Ln]=numeric_limits<int>::max();
+
+	for(int j=0;j<Rn;++j){
+		Ra[j]=a[q+j+1];
+	}
+	Ra[Rn]=numeric_limits<int>::max();
+
+	int k=0,m=0;
+
+	for(int n=p;n<=r;++n){
+		if(La[k]<Ra[m]){
+			a[n]=La[k];
+			++k;
+		}else{
+			a[n]=Ra[m];
+			m++;
+		}
+	}
+	delete [] La;
+	delete [] Ra;
+}
+
+void insert_sort(int *a ,int n)//直接插入法
+{
+	int key,j;
+	for(int i=1;i<n;++i){
+		key=a[i];
+		j=i-1;
+		while(j>=0 && key<a[j]){
+			a[j+1]=a[j];
+			--j;
+		}	
+		a[j+1]=key;
+	}
+}
+
+void merge_insertion_sort(int *a,int p,int q,int k)//归并，直接插入联合使用
+{
+	if(p<q){
+		if((q-p+1)>k){
+			int mid=(p+q)>>1;
+			merge_insertion_sort(a,p,mid,k);
+			merge_insertion_sort(a,mid+1,q,k);
+			merge(a,p,mid,q);
+		}else{
+			insert_sort(a+p,q-p+1);
+		}		
+	}
+}
+
+void merge_sort(int *a,int p,int q)
+{
+	if(p<q){
+		int mid=(p+q)>>1;
+		merge_sort(a,p,mid);
+		merge_sort(a,mid+1,q);
+		//merge(a,p,mid,q);
+		merge(a,p,mid,q);
+	}
+}
+
+
+
+int main()
+{
+	srand(time(NULL));
+	int n;
+	//while((n= rand()%100)<3);
+	n=500000;
+	int * a=new int[n];
+	int * b=new int[n];
+
+	for(int i=0;i<n;i++){
+		a[i]=rand()%100000;	
+		b[i]=a[i];	
+	}
+	
+	cpu_timer t;
+	merge_insertion_sort(a,0,n-1,log(n)/log(2));
+	t.stop();	
+
+	cpu_timer t2;
+	merge_sort(b,0,n-1);
+	t2.stop();
+
+	delete [] a;
+	delete [] b;
+
+	cout<<t.format();
+
+	cout<<t2.format();
+
+}
