@@ -1,0 +1,88 @@
+#include <iostream>
+#include <ctime>
+#include <limits>
+
+using namespace std;
+
+void merge(int *a,int low,int mid,int high)//哨兵法 归并排序
+{
+	int Ln=mid-low+1;
+	int Rn=high-mid;
+
+	int *La=new int[Ln+1];
+	int *Ra=new int[Rn+1];
+
+	for(int i=0;i<Ln;++i){
+		La[i]=a[low+i];
+	}
+	for(int j=0;j<Rn;++j){
+		Ra[j]=a[mid+j+1];
+	}
+	La[Ln]=numeric_limits<int>::max();
+	Ra[Rn]=numeric_limits<int>::max();
+
+	int m=0,n=0;
+	for(int k=low;k<=high;++k){
+		if(La[m]<=Ra[n]){
+			a[k]=La[m];
+			++m;
+		}else{
+			a[k]=Ra[n];
+			++n;
+		}
+	}	
+}
+
+void merge_sort(int * a,int low,int high)//O(n*lgn)
+{
+	if(low<high){
+		int mid=(low+high)>>1;
+		merge_sort(a,low,mid);
+		merge_sort(a,mid+1,high);
+		merge(a,low,mid,high);
+	}
+}
+
+bool sum_to_x(int *a,int low,int high,int x)//求序列S中是否存在两个数之和为X,O(n)
+{
+	int i=low,j=high;
+	while (i<j){
+		if(x==(a[i]+a[j])){
+			return true;
+		}else if(x<(a[i]+a[j])){
+			--j;
+		}else{
+			++i;
+		}
+	}
+	return false;
+
+}
+
+
+int main()
+{
+	srand(time(NULL));
+	int count;
+	while ((count=rand()%20)<3);
+	int *a=new int[count];
+
+	for(int i=0;i<count;++i){
+		a[i]=rand()%35;
+		cout<<a[i]<<" ";
+	}
+	cout<<endl;
+
+	merge_sort(a,0,count-1);
+
+	for(int i=0;i<count;++i){
+		cout<<a[i]<<" ";
+	}
+	cout<<endl;
+	int x=rand()%100;
+	bool flag=sum_to_x(a,0,count-1,x);
+
+	cout<<x<<" is in S ? "<<boolalpha<<flag<<endl;
+
+
+}
