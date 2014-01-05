@@ -78,7 +78,6 @@ int heap_extract_min(pNode *a,int n)//获取堆的最小值，并更新堆
 int main()
 {
 	srand(time(NULL));
-	int count=10;
 	int k;
 	while (k=(rand()%6),k<3 || k>6);//k个链表
 	int *size=new int[k];//每个链表的大小，不含首元素
