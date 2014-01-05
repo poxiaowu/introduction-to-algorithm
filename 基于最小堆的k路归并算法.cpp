@@ -9,12 +9,6 @@ typedef struct node{
 	node *next;
 }node,*pNode;
 
-typedef struct heap_list{
-	node *curr;
-	node *left;
-	node *right;
-};
-
 void insert_node(node *head, node *nenode)//直接插入法，插入新节点
 {
 	node *cur=head;
