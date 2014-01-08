@@ -31,7 +31,7 @@ void inserting_sort(node *c,int b)
 		c->next=inse;
 		inse->next=NULL;
 	}else{
-		while ((c->next->value)<(b)){
+		while (c->next!=NULL)){
 			c=c->next;
 		}
 		inse->next=c->next;
