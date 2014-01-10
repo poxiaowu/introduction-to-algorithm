@@ -67,14 +67,14 @@ void counting_sort(char **str,int index,int offset,int n)//计数排序
 		c[i]=c[i]+c[i-1];
 	}
 	for(int i=n-1;i>=0;--i){
-		strCpy[c[str[i+offset][index]-min]-1]=new char[strlen(str[i+offset])+1];//初始化内存空间
-		//strcpy(strCpy[c[str[i][index]-min]-1],str[i]);//复制值
-		memcpy(strCpy[c[str[i+offset][index]-min]-1],str[i+offset],strlen(str[i+offset])+1);
+		//strCpy[c[str[i+offset][index]-min]-1]=new char[strlen(str[i+offset])+1];//初始化内存空间
+		//memcpy(strCpy[c[str[i+offset][index]-min]-1],str[i+offset],strlen(str[i+offset])+1);
+		strCpy[c[str[i+offset][index]-min]-1]=str[i+offset];		
 		c[str[i+offset][index]-min]--;//每组字符个数减1
 	}
 	for(int i=0;i<n;++i){
-		//strcpy(str[i],strCpy[i]);//将结果放回原始数组中
-		memcpy(str[i+offset],strCpy[i],strlen(strCpy[i])+1);
+		//memcpy(str[i+offset],strCpy[i],strlen(strCpy[i])+1);
+		str[i+offset]=strCpy[i];
 	}
 	
 	for(int i=0;i<count-1;++i){
@@ -109,11 +109,11 @@ int main()
 	srand(time(NULL));
 	int count;
 	while (count=rand()%100,count<50);
-	count=20000;
+	count=40000000;
 	char **str=new char*[count];
 	int size;
 	for(int i=0;i<count;++i){
-		while (size=rand()%20,size<2);
+		while (size=rand()%10,size<2);
 		str[i]=new char[size];
 		int j=0;
 		while (j<size-1){//随机生成字符串
@@ -134,19 +134,20 @@ int main()
 	}
 	cout<<endl;*/
 	cout<<endl<<"*******************************"<<endl;
+	cout<<count<<" strings"<<endl;
 	cpu_timer t1;
 	t1.start();
 	counting_sort(str,0,0,count);
 	t1.stop();
 	cout<<endl<<"*******************************"<<endl;
-	/*for(int i=0;i<count;++i){
-		cout<<str[i]<<"\t";
-	}
-	cout<<endl;*/
+	//for(int i=0;i<count;++i){
+	//	cout<<str[i]<<"\t";
+	//}
+	//cout<<endl;
 	cout<<t1.format();
 	for(int i=0;i<count;++i){
-		//delete [] str[i];
-		str[i]=NULL;
+		delete [] str[i];
+		//str[i]=NULL;
 	}
 	delete[] str;
 }
