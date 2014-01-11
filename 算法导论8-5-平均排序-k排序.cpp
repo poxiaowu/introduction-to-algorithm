@@ -4,7 +4,7 @@
 using namespace std;
 using namespace boost::timer;
 
-void quick_k_sort_partition(int *a,int low,int high,int interval)//快速排序
+void quick_k_sort_partition(int *a,int low,int high,int interval)//借用快速排序排列某种元素
 {
 	if(low<high){		
 			int key=a[low];
@@ -30,7 +30,7 @@ void quick_k_sort_partition(int *a,int low,int high,int interval)//快速排序
 		}
 }
 
-void quick_k_sort(int *a,int low,int high,int interval)
+void quick_k_sort(int *a,int low,int high,int interval)//0到k-1组进行排序
 {
 	for(int co=0;co<interval;++co){
 		int m=(high/interval)*interval;
@@ -39,22 +39,36 @@ void quick_k_sort(int *a,int low,int high,int interval)
 	}
 }
 
+
+
+
+void average_sort(int *a,int n)
+{
+	for(int i=0;i<n;++i){
+	}
+}
+
 int main()
 {
 	srand(time(NULL));
 	int count;
 	while(count=rand()%10,count<3);
-	count=4;
+	count=10;
 	int *a=new int[count];
 	for(int i=0;i<count;++i){
 	a[i]=rand()%21-10;
 	cout<<a[i]<<"\t";
 	}
 	cout<<endl;
-	quick_k_sort(a,0,count,3);
+	/*a[0]=3,a[1]=0,a[2]=-9,a[3]=-9,a[4]=-6,a[5]=-1;
+	for(int i=0;i<count;++i){
+	cout<<a[i]<<"\t";
+	}*/
+	cout<<endl;
+	int k=3;//k表示k排序
+	quick_k_sort(a,0,count,k);
 	for(int i=0;i<count;++i){
 		cout<<a[i]<<"\t";
 	}
 	cout<<endl;
-	delete[]a;
 }
