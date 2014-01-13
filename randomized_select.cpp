@@ -50,17 +50,21 @@ int random_select_recursive(int *a,int low,int high,int index)
 {
 	while (low<=high)
 	{
-		int p=random_partition(a,low,high);
-		int k=p-low+1;
+		if(low==high)
+			return a[low];
+		else{
+			int p=random_partition(a,low,high);
+			int k=p-low+1;
 		
-		if(index>k){
-			low=p+1;
-			index-=k;
-		}else if(index<k){
-			high=p-1;
-		}
-		else
-			return a[p];
+			if(index>k){
+				low=p+1;
+				index-=k;
+			}else if(index<k){
+				high=p-1;
+			}
+			else
+				return a[p];
+			}
 	}	
 	return 0;
 }
@@ -71,18 +75,18 @@ int main()
 	srand((unsigned)time(NULL));
 	int count;
 	while (count=rand()%10,count<3);
-	count=10000000;
+	count=10;
 	int *a=new int[count];
 	int *b=new int[count];
 	for(int i=0;i<count;++i){
-		a[i]=rand()%10000001-5000000;
+		a[i]=rand()%21-10;
 		b[i]=a[i];
-		//cout<<a[i]<<"\t";
+		cout<<a[i]<<"\t";
 	}
-	//cout<<endl;
-	int v=random_select(a,0,count-1,10000);
+	cout<<endl;
+	int v=random_select(a,0,count-1,3);
 	cout<<v<<endl;
-	v=random_select_recursive(a,0,count-1,10000);
+	v=random_select_recursive(a,0,count-1,3);
 	cout<<v<<endl;
 	delete[]a;
 	delete[]b;
