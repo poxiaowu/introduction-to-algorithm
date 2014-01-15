@@ -38,26 +38,24 @@ int random_partition(int *a,int low,int high)//随机化快速排序
 	return partition(a,low,high);	
 }
 
-int random_select(int *a,int low,int high,int index)//找出第index个最小元素
+int random_select(int *a,int low,int high,int index)
 {
-	if(low == high){
+	if(low==high)
 		return a[low];
-	}
-	int p=random_partition(a,low,high);
-	/*for(int i=low;i<=high;i++){
+	int q=random_parition(a,low,high);
+	int k=q+1;
+
+	/*for(int i=low;i<=high;++i)
 		cout<<a[i]<<"\t";
-	}
 	cout<<endl;*/
-	//int k=p;
 
-	//int p=partition(a,low,high);
-
-	if(p==index)
-		return a[p];
-	else if(p<index){
-		return random_select(a,p+1,high,index);
+	if(k==index){
+		return a[q];
+	}
+	else if(k<index){
+		return random_select(a,q+1,high,index);
 	}else{
-		return random_select(a,low,p-1,index);
+		return random_select(a,low,q-1,index);
 	}
 }
 
