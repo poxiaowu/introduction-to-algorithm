@@ -49,6 +49,9 @@ int random_select(int *a,int low,int high,int index)//找出第index个最小元
 	}
 	cout<<endl;*/
 	//int k=p;
+
+	//int p=partition(a,low,high);
+
 	if(p==index)
 		return a[p];
 	else if(p<index){
@@ -74,8 +77,8 @@ void naive_quicksort(int *a,int low,int high)
 {
 	if(low<high){
 		int q = partition(a,low,high);
-		best_case_quicksort(a,low,q-1);
-		best_case_quicksort(a,q+1,high);
+		naive_quicksort(a,low,q-1);
+		naive_quicksort(a,q+1,high);
 	}
 }
 
