@@ -56,25 +56,16 @@ void travel_stack_binary_tree(pnode pn)//利用堆栈模拟递归遍历
 		while(pn||ps->top){			
 			if(pn){
 				cout<<pn->value<<"\t";//输出元素值				
-				if(pn->left){
 					pl=new list;
 					pl->pn=pn;//根节点入栈
 					pl->next=ps->top;
 					ps->top=pl;
 					pn=pn->left;//左节点
-				}else{
-					pn=NULL;
-				}
 			}
 			else{				
 				pl=ps->top;
-				ps->top=ps->top->next;//弹出栈中左结点元素			
-				
-				if(pl->pn->right){
-					pn=pl->pn->right;
-				}else{
-					pn=NULL;
-				}
+				ps->top=ps->top->next;//弹出栈中左结点元素					
+				pn=pl->pn->right;
 				delete pl;//删除左结点
 			}	
 		}
@@ -124,7 +115,7 @@ int main()
 	int maxDep;
 	while(maxDep=rand()%10,maxDep<3);
 	pnode pn;
-	maxDep=5;
+	maxDep=2;
 	build_binary_tree(pn,0,maxDep);//构建二叉树
 	cout<<endl;
 	travel_level_binary_tree(pn);//层次遍历-队列实现
