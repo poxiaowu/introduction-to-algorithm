@@ -157,17 +157,34 @@ pNode binary_tree_predecessor(pNode pn)//二叉查找树节点前驱
 	return y;
 }
 
+void InOrder_successor(pNode pn)
+{
+	if(pn){
+		pNode p=binary_tree_minimum(pn);
+		cout<<p->value<<"\t";
+		while(p){
+			p=binary_tree_successor(p);
+			if(p){
+				cout<<p->value<<"\t";
+			}
+		}
+		cout<<endl;
+	}
+}
+
 
 int main()
 {
 	srand((unsigned)time(NULL));
-	int n=100;
+	int n=50;
 	pNode pn=NULL;
 	build_binary_search_tree(pn,n);
 	cout<<endl;
 	InOrder(pn);//中序排序
 	cout<<endl;
 	InOrder_Parent(pn);
+	cout<<endl;
+	InOrder_successor(pn);
 
 	int key=rand()%201-100;//随机查找值
 	pNode p;//存放返回值
