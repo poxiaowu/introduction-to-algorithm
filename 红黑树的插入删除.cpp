@@ -193,6 +193,136 @@ pRBNode binary_tree_predecessor(pRBNode pz)
 	return p;
 }
 
+void rb_transplant(pRBNode &pn,pRBNode u,pRBNode v)//红黑树删除操作辅助程序
+{
+	if(u->parent==NULL){
+		pn=v;
+	}else if(u==u->parent->left){
+		u->parent->left=v;
+	}else{
+		u->parent->right=v;
+	}
+	if(v){
+		v->parent=u->parent;
+	}
+}
+
+void rb_delete_fixup(pRBNode &pn,pRBNode px)//红黑树 删除操作修正
+{
+	while(px!=pn && 0==px->rb){
+		pRBNode pw;//px的兄弟结点
+		if(px==px->parent->left){//px为左子结点
+			pw=px->parent->right;
+			if(pw->rb){//兄弟结点为红色,case one
+				px->parent->rb=1;
+				pw->rb=0;
+				binary_tree_left_rotation(pn,px->parent);//左旋转
+				pw=px->parent->right;
+			}
+			if(pw->left->rb==0 && pw->right->rb==0){//case two
+				pw->rb=1;
+				px=px->parent;
+				//delete px->left;//删掉多余的辅助结点
+				//px->left=NULL;
+			}
+			else{ 
+				if(pw->right->rb==0){//case three
+					pw->left->rb=0;
+					pw->rb=1;				
+					binary_tree_right_rotation(pn,pw);
+					pw=px->parent->right;
+				}
+				pw->rb=px->parent->rb;
+				px->parent->rb=0;
+				pw->right->rb=0;				
+				binary_tree_left_rotation(pn,px->parent);
+				/*px->parent->left=NULL;
+				delete px;*/
+				px=pn;
+			}
+		}else{//px为右子结点
+			pw=px->parent->left;
+			if(pw->rb){
+				px->parent->rb=1;
+				pw->rb=0;
+				binary_tree_right_rotation(pn,px->parent);
+				pw=px->parent->left;
+			}
+			if(pw->left->rb==0 && pw->right->rb==0){
+				pw->rb=1;
+				px=px->parent;
+				/*delete px->right;
+				px->right=NULL;*/
+			}else{
+				if(pw->left->rb==0){
+					pw->right->rb=0;
+					pw->rb=1;
+					binary_tree_left_rotation(pn,pw);
+					pw=px->parent->left; 
+				}
+				pw->rb=px->parent->rb;
+				px->parent->rb=0;
+				pw->left->rb=0;
+				binary_tree_right_rotation(pn,px->parent);
+				/*px->parent->right=NULL;
+				delete px;*/
+				px=pn;
+			}
+		}
+	}
+	px->rb=0;
+}
+
+void rb_delete(pRBNode &pn,pRBNode pz)
+{
+	pRBNode py=pz;//py记录pz或者pz的后继
+	bool y_org_color=py->rb;//记录删除结点的颜色
+	pRBNode px;//px记录py的右结点
+	if(pz->left==NULL){
+		px=py->right;
+		//if(px==NULL){//出现px为空的情况
+		//	px=new rb_node;
+		//	px->rb=0;
+		//	px->parent=py;
+		//	py->right=px;
+		//}
+		rb_transplant(pn,pz,pz->right);
+	}else if(pz->right==NULL){
+		px=py->left;
+		//if(px==NULL){//px记录py的右结点
+		//	px=new rb_node;
+		//	px->rb=0;
+		//	px->parent=py;
+		//	py->left=px;
+		//}
+		rb_transplant(pn,pz,pz->left);
+	}else{
+		py=binary_tree_minimux(pz->right);//pz的后继
+		px=py->right;//py的后继
+		//if(px==NULL){//出现px为空的情况
+		//	px=new rb_node;
+		//	px->rb=0;
+		//	px->parent=py;
+		//	py->right=px;
+		//}
+		y_org_color=py->rb;
+		if(py=pz->right){
+			px->parent=py;
+		}else{
+			rb_transplant(pn,py,py->right);
+			py->right=pz->right;
+			py->right->parent=py;
+		}
+		rb_transplant(pn,pz,py);
+		py->left=pz->left;
+		py->left->parent=py;
+		py->rb=pz->rb;
+	}
+	if(0==py->rb){//被删除或者被调整为的内部结点为黑色
+		rb_delete_fixup(pn,px);
+	}
+}
+
 int main()
 {
 	srand((unsigned)time(NULL));
@@ -203,7 +333,7 @@ int main()
 
 	pRBNode p;
 	int key;
-	for(int i=0;i<5;++i){
+	for(int i=0;i<50;++i){
 		key=rand()%101-50;
 		cout<<endl<<"search key : "<<key;
 		p=binary_tree_search(pn,key);//二叉搜索树查找
@@ -218,6 +348,8 @@ int main()
 				cout<<"right rotation"<<endl;
 				binary_tree_right_rotation(pn,p);
 			}
+			cout<<"node be deleted"<<endl;
+			//rb_delete(pn,p);//删除结点
 			InOrder(pn);//中序排序
 		}else{
 			cout<<" not founded"<<endl;
