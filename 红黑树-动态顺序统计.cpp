@@ -335,6 +335,13 @@ int os_rank(pRBNode pn,pRBNode pz)//求红黑树中pz的秩
 	return r;
 }
 
+pRBNode os_successor(pRBNode pn,pRBNode pz,int i)//确定pz的第i个后继
+{
+	int r=os_rank(pn,pz);
+	r+=i;
+	return os_select(pn,r);
+}
+
 int main()
 {
 	srand((unsigned)time(NULL));
@@ -363,7 +370,8 @@ int main()
 		p=binary_tree_search(pn,key);//二叉搜索树查找
 		if(p!=nil){
 			cout<<" founded. ";
-			cout<<"its rank is "<<os_rank(pn,p)<<endl;
+			cout<<"its rank is "<<os_rank(pn,p)<<". ";
+			cout<<"its "<<3<<" th successor is : "<<os_successor(pn,p,3)->value<<endl;
 			cout<<"successor is : "<<binary_tree_successor(p)->value<<endl;
 			cout<<"predecessor is :"<<binary_tree_predecessor(p)->value<<endl;
 			cout<<"node be deleted"<<endl;
