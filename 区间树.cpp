@@ -169,14 +169,45 @@ void InOrder(pInterval_tree pn)//中序遍历
 
 pInterval_tree interval_search(pInterval_tree pn,pInterval_tree pi)//区间查找
 {
-	while(pn!=nil && (pi->high<pn->low || pi->low > pn->high)){//区间不重叠
-		if(pn->left!=nil && pn->left->max>=pi->low){
+	while(pn!=nil && (pi->high<=pn->low || pi->low >= pn->high)){//区间不重叠
+		if(pn->left!=nil && pn->left->max>pi->low){
 			pn=pn->left;
 		}else{
 			pn=pn->right;
 		}
 	}
 	return pn;
+}
+
+pInterval_tree min_interval_search(pInterval_tree pn,pInterval_tree pi)//搜索最小的区间
+{
+	if(pn!=nil && pn->left->max>=pi->low){
+		pInterval_tree py=min_interval_search(pn->left,pi);
+		if (py!=nil){
+			return py;
+		}else if(pn->low<=pi->high && pi->low<=pn->high){
+			return pn;
+		}else{
+			return nil;
+		}
+	}else if(pn->low<=pi->high && pi->low<=pn->high){
+		return pn;
+	}else{
+		return min_interval_search(pn->right,pi);
+	}
+}
+
+void interval_search_all(pInterval_tree pn,pInterval_tree pi)//搜索所以重叠区间
+{
+	if(pn !=nil && pn->low<=pi->high && pi->low<=pn->high){
+		cout<<"["<<pn->low<<","<<pn->high<<"]"<<"  ";
+	}
+	if(pn->left !=nil && pn->left->max>=pi->low){//查找左子树
+		interval_search_all(pn->left,pi);
+	}
+	if(pn->right !=nil && pn->right->max>=pi->low){//查找右子树
+		interval_search_all(pn->right,pi);
+	}
 }
 
 int main()
@@ -207,7 +238,10 @@ int main()
 	cout<<"search area : ["<<pt->low<<","<<pt->high<<"]";
 	if(pr!=nil){
 		cout<<" founded -> ";
+		cout<<"["<<pr->low<<","<<pr->high<<"]"<<"\t";
+		pr=min_interval_search(pn,pt);
 		cout<<"["<<pr->low<<","<<pr->high<<"]"<<endl;
+		interval_search_all(pn,pt);
 	}else{
 		cout<<"not found"<<endl;
 	}
