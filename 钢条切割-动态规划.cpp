@@ -81,33 +81,74 @@ void print_bottom_up_cut_rod(int *cos,int *p,int n,int *result)//打印bottom_up
 	}
 }
 
+int modified_cut_rod(int *cos,int *p,int n,int c,int *result)
+{
+	int q;
+	for(int i=1;i<=n;++i){
+		q=p[i-1];
+		result[i]=i;
+		for(int j=0;j<i-1;++j){
+			int val=p[j]+cos[i-j-1]-c;
+			if(q<val){
+				q=val;
+				result[i]=j+1;
+			}			
+		}
+		cos[i]=q; 
+	}
+	return cos[n];
+}
+
+void print_modified_cut_rod(int *cos,int *p,int n,int c,int *result)
+{
+	cout<<modified_cut_rod(cos,p,n,c,result)<<endl;
+	/*for(int i=1;i<=n;++i){
+		cout<<result[i]<<"\t";
+	}
+	cout<<endl;*/
+	while (n>0){
+		cout<<result[n]<<"\t";
+		n-=result[n];
+	}
+	cout<<endl;
+}
 
 int main()
 {
 	int p[30]={1,5,8,9,10,17,18,20,24,30,
 			33,35,38,39,43,47,48,50,54,60,
-			63,66,68,69,72,77,78,80,84,90};//代价数组
-	int n=29;
-	int *cost=new int[n];
-	for(int i=0;i<n;++i){
-		cost[i]=numeric_limits<int>::min();
-	}
+			62,63,68,69,73,75,78,80,84,90};//代价数组
+	int n=28;
 
 	int *cos =new int[n+1];
-	memset(cos,0,sizeof(int)*(n+1));
 	int *result=new int[n+1];
+	
+	memset(cos,0,sizeof(int)*(n+1));	
+	memset(result,0,sizeof(int)*(n+1));
+	cpu_timer t4;
+	t4.start();
+	print_modified_cut_rod(cos,p,n,1,result);
+	t4.stop();
+	cout<<t4.format();
+
+	memset(cos,0,sizeof(int)*(n+1));
+	memset(result,0,sizeof(int)*(n+1));
 	cpu_timer t3;
 	t3.start();
 	print_bottom_up_cut_rod(cos,p,n,result);
 	cout<<endl;
 	t3.stop();
 	cout<<t3.format();
-	delete cos;
+	
 	
 	memset(result,0,sizeof(int)*(n+1));
+	for(int i=0;i<=n;++i){
+		cos[i]=numeric_limits<int>::min();
+	}
+	cout<<endl;
 	cpu_timer t2;
 	t2.start();
-	print_memo_cut_rod(cost,p,n,result);
+	print_memo_cut_rod(cos,p,n,result);
 	cout<<endl;
 	t2.stop();
 	cout<<t2.format();
@@ -119,6 +160,6 @@ int main()
 	cout<<endl;
 	t1.stop();
 	cout<<t1.format();
-	delete [] cost;
+	delete [] cos;
 	delete [] result;
 }
