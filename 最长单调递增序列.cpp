@@ -74,7 +74,7 @@ int binary_search(int *b,int key,int low,int high)//二叉搜索待插入点位�
 		if(b[mid]<key){
 			low=mid+1;
 		}else if(b[mid]>key){
-			high=mid-1;
+			high=mid;//最长单调递增子序列时，此处的high=mid
 		}else{
 			return mid;
 		}
@@ -86,12 +86,14 @@ int minimum_lis(int *a,int *b,int n)//最小元素的最长递增子序列
 {
 	int len=0;
 	b[len]=a[0];
+	int pos;
 	for(int i=1;i<n;++i){
-		if(b[len]<=a[i]){
+		if(b[len]<a[i]){
 			len++;
 			b[len]=a[i];
 		}else{
-			b[binary_search(b,a[i],0,len)]=a[i];
+			pos=binary_search(b,a[i],0,len);
+			b[pos]=a[i];
 		}
 	}
 	return len;
@@ -102,13 +104,16 @@ int main()
 	srand((unsigned)time(NULL));
 	int n;
 	while(n=rand()%53,n<30);
-	n=11;
-	int a[11]={/*34,-6,38,-16,-11,31,-16,-30,*/29,-10,
-				29,-47,-47,17,-25,-19,-3,48,26/*,50*/};
-	//int *a=new int[n];
-	//for(int i=0;i<n;++i){//随机生成字符数组
-	//		a[i]=rand()%101-50;
-	//}
+	/*n=48;
+	int a[48]={36,14, -23, -26, -35, -44, 42, 11, 18, 35,
+				10, -42, 45, -42, -19, -43, -9 ,-48, 49,-28 ,
+				-31, 9, 18 ,19 ,14, 30 ,-35 ,42, -46,-50,
+				38, 5, 22, 35, -19 ,-30, -18 ,35, -50,24 ,
+				-7 ,-13, 15 ,-8 ,37 ,43, -44, 36};*/
+	int *a=new int[n];
+	for(int i=0;i<n;++i){//随机生成字符数组
+			a[i]=rand()%101-50;
+	}
 	for(int i=0;i<n;++i){
 		cout<<a[i]<<" ";
 	}
@@ -181,6 +186,6 @@ int main()
 		cout<<e[i]<<"\t";
 	}
 	cout<<endl;
-	//delete[]a;
+	delete[]a;
 	delete[]e;
 }   
