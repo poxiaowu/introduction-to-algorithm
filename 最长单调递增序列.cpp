@@ -56,7 +56,7 @@ void print_lcs_recursive(int *a,int *b,int **c,int m,int n)
 {
 	if(m==0 || n==0)
 		return;
-	if(c[m][n]==c[m-1][n-1]+1){
+	if((c[m][n]==c[m-1][n-1]+1)&& c[m][n]!=c[m-1][n] &&c[m][n]!=c[m][n-1]){
 		print_lcs_recursive(a,b,c,m-1,n-1);
 		cout<<a[m-1]<<"\t";
 	}else if(c[m-1][n]>c[m][n-1]){
