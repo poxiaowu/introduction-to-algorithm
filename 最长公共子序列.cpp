@@ -32,27 +32,27 @@ int memo_lcs_length(char *a,int m,char *b,int n,int **c)
 }
 
 
-void print_lcs_recursive(char *a,char *b,int **c,int m,int n)
+void print_lcs_recursive(int *a,int *b,int **c,int m,int n)
 {
 	if(m==0 || n==0)
 		return;
-	if(c[m][n]==c[m-1][n-1]+1){
+	if((c[m][n]==c[m-1][n-1]+1)&& c[m][n]!=c[m-1][n] &&c[m][n]!=c[m][n-1]){
 		print_lcs_recursive(a,b,c,m-1,n-1);
-		cout<<a[m-1];
-	}else if(c[m][n]==c[m-1][n]){
+		cout<<a[m-1]<<"\t";
+	}else if(c[m-1][n]>c[m][n-1]){
 		print_lcs_recursive(a,b,c,m-1,n);
 	}else{
 		print_lcs_recursive(a,b,c,m,n-1);
 	}
 }
 
-void print_lcs_iterator(char *a,char *b,int **c,int m,int n)
+void print_lcs_iterator(int *a,int *b,int **c,int m,int n)
 {
 	while (m!=0 && n!=0){
-		if(c[m][n]==c[m-1][n-1]+1){
+		if((c[m][n]==c[m-1][n-1]+1)&& c[m][n]!=c[m-1][n] &&c[m][n]!=c[m][n-1]){
 			m-=1;
 			n-=1;
-			cout<<a[m-1];
+			cout<<a[m]<<"\t";
 		}else if(c[m][n]==c[m-1][n]){
 			m-=1;
 		}else{
