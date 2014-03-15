@@ -42,39 +42,46 @@ void longest_palindrome(char *s,int **p,int length)
 	}
 }
 
-void print_longest_palindrome(int **p,char *c,int n)
+void print_longest_palindrome(int **p,char *c,int n)//打印最长回文字符串
 {
 	int length=p[0][n-1];
 	int k=length/2;
-	char *cc=new char[k];
-	int i,j=0;//保存位置
-	for(i=n-1;i>0 && j<k ;--i){
-		if(p[0][i]!=p[0][i-1]){
-			cc[j]=c[i];
-			j++;
+	char *cc=new char[length+1];
+	cc[length]='\0';
+	int i=0,j=n-1;//保存位置
+	int low=0,high=length-1;//回文字符串中的上下下标	
+	while (i<j){
+		while (p[i][j]==p[i+1][j]){
+			++i;
 		}
+		cc[low++]=c[i];
+		while(p[i][j]==p[i][j-1]){
+			--j;
+		}
+		cc[high--]=c[j];
+		++i;
+		--j;
+	}	
+	if(low==high){
+		cc[low]=c[i];
 	}
-	char *cr=new char[length];
-	cr[k]=c[i];//回文字符串中间值
-	j=0;
-	for(int m=0;m<k;++m,++j){
-		cr[m]=cc[j];
-		cr[length-m-1]=cc[j];
-	}
-	delete [] cc;
-	for(int m=0;m<length;++m){
-		cout<<cr[m];
+	for(int k=0;k<length;++k){
+		cout<<cc[k];
 	}
 	cout<<endl;
-	delete[]cr;
+	delete []cc;
 }
 
 int main()
 {
 	srand((unsigned)time(NULL));
-	int n;
+	int n=23;
 	n=rand()%20+20;
 	char *s=new char[n];
+	/*s[0]='n',s[1]='m',s[2]='g',s[3]='s',s[4]='v',s[5]='g',
+	s[6]='r',s[7]='i',s[8]='s',s[9]='m',s[10]='y',s[11]='g',s[12]='x',
+	s[13]='p',s[14]='p',s[15]='e',s[16]='j',s[17]='x',s[18]='p',s[19]='q',
+	s[20]='j',s[21]='a',s[22]='i';*/
 	for(int i=0;i<n;++i){
 		//if(rand()%2){
 			s[i]=rand()%26+'a';
