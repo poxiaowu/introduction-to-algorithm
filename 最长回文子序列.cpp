@@ -45,7 +45,6 @@ void longest_palindrome(char *s,int **p,int length)
 void print_longest_palindrome(int **p,char *c,int n)//打印最长回文字符串
 {
 	int length=p[0][n-1];
-	int k=length/2;
 	char *cc=new char[length+1];
 	cc[length]='\0';
 	int i=0,j=n-1;//保存位置
