@@ -1,9 +1,6 @@
 #include <iostream>
 #include <ctime>
-#include <limits>
-#include <boost/timer/timer.hpp>
 using namespace std;
-using namespace boost::timer;
 
 void longest_palindrome(char *s,int **p,int length)
 {
