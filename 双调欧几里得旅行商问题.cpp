@@ -146,4 +146,11 @@ int main()
 	cout<<endl;
 	print_tour(pp,r,n);
 	cout<<endl;
+	for(int i=0;i<n;++i){
+		delete[]r[i];
+		delete[]b[i];
+	}
+	delete [] r;
+	delete [] b;
+	delete [] pp;
 }
