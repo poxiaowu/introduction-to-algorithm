@@ -37,7 +37,7 @@ void euclidean_TSP(ppoint *pp,double **b,int **r,int n)//双调欧几里得旅�
 {
 	double q;
 	b[0][1]=euclidean_distance(pp[0],pp[1]);//保存最初的欧式距离
-	//r[0][1]=0;
+	r[0][1]=0;
 	for(int j=2;j<n;++j){
 		for(int i=0;i<j-1;++i){
 			b[i][j]=b[i][j-1]+euclidean_distance(pp[j-1],pp[j]);
@@ -59,15 +59,15 @@ void print_path(ppoint *pp,int **r,int i,int j)//递归遍历
 	int k;
 	if(i<j){
 		k=r[i][j];
-		if(k!=i){
+		if(k!=i && k!=0){//当k=0时不用打印，否则会打印2次
 			cout<<"["<<pp[k]->x<<","<<pp[k]->y<<"]"<<" ";
 		}
-		if(k>0){
+		if(k>=0){
 			print_path(pp,r,i,k);
 		}
 	}else{
 		k=r[j][i];
-		if(k>0){
+		if(k>=0){
 			print_path(pp,r,k,j);
 			cout<<"["<<pp[k]->x<<","<<pp[k]->y<<"]"<<" ";
 		}
@@ -85,7 +85,7 @@ void print_tour(ppoint *pp,int **r,int n)//打印旅行商问题的路径
 int main()
 {
 	srand((unsigned)time(NULL));
-	int n=20;
+	int n=10;
 
 	ppoint *pp=new ppoint[n];//随机生成n个点
 
@@ -102,7 +102,11 @@ int main()
 	pp[4]->x=6,pp[4]->y=1;
 	pp[5]->x=7,pp[5]->y=5;
 	pp[6]->x=8,pp[6]->y=2;*/
-
+	//pp[0]->x=2,pp[0]->y=0;
+	//pp[1]->x=3,pp[1]->y=2;
+	//pp[2]->x=4,pp[2]->y=0;
+	//pp[3]->x=6,pp[3]->y=2;
+	//pp[4]->x=8,pp[4]->y=6;
 	cout<<endl;
 	quick_sort_partition(pp,0,n-1);//根据x值进行快速排序
 	for(int i=0;i<n;++i){
