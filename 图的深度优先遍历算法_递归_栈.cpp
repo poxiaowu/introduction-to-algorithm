@@ -136,7 +136,7 @@ int in_degree(pLink_graphic *&plg,int value,int n)//入度
 	pLink_graphic plgtmp;
 	int count=0;
 	for(int i=0;i<n;++i){
-		if(plg[i]->value!=value){
+		if(i!=value){
 			plgtmp=plg[i]->next;
 			while(plgtmp){
 				if(plgtmp->value==value){
@@ -168,23 +168,24 @@ bool vertify_isolated(pLink_graphic *&plg,int value,int n)//检查是否有孤�
 }
 void break_isolated(pLink_graphic *&plg,int n)//打破孤立的点
 {
-	int tmp;//随机点
+	int tmp1;//随机点
 	pLink_graphic plgtmp;
 	for (int i=0;i<n;++i){
-		if(vertify_isolated(plg,i,n)){
-			while((tmp=rand()%n)!=i){//产生一个随机的点
-				if(rand()%2){//增加出度
-					plgtmp=new Link_graphic;
-					plgtmp->value=tmp;
-					plgtmp->next=NULL;
-					add_vertex(plg[i],plgtmp);//增加出度
-				}else{//增加一个入度
-					plgtmp=new Link_graphic;
-					plgtmp->value=i;
-					plgtmp->next=NULL;
-					add_vertex(plg[tmp],plgtmp);
-				}
+		if(vertify_isolated(plg,i,n)){//检测是否有孤立的点
+			while((tmp1=rand()%n)==i);//产生一个随机的点
+			//增加出度
+			if(rand()%2){
+				plgtmp=new Link_graphic;
+				plgtmp->value=tmp1;
+				plgtmp->next=NULL;
+				add_vertex(plg[i],plgtmp);
+			}else{//添加入度
+				plgtmp=new Link_graphic;
+				plgtmp->value=i;
+				plgtmp->next=NULL;
+				add_vertex(plg[tmp1],plgtmp);
 			}
+			
 		}
 	}
 }
