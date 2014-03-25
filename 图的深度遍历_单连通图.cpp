@@ -68,8 +68,8 @@ void singly_connectd(pLink_graphic *&plg,int n)//判断是否是单连通
 {
 	int *visited=new int[n];//判断连通与否，需要用到2种状态，0表示尚未被访问，1表示正在被访问，尚未回溯结束，2表示已经被访问并已结束
 	for(int i=0;i<n;++i){
-		for(int i=0;i<n;++i){//对每个定点的时候都要进行初始化
-			visited[i]=0;//初始都标记为未被访问
+		for(int j=0;j<n;++j){//对每个定点的时候都要进行初始化
+			visited[j]=0;//初始都标记为未被访问
 		}
 		if(dfs_visit(plg,i,visited)==false){//若为非单连通，则退出
 			delete [] visited;
