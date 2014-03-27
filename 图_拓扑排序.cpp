@@ -8,6 +8,41 @@ typedef struct Link_graphic{//邻接表
 	Link_graphic *next;
 }Link_graphic,*pLink_graphic;
 
+typedef struct Queue{//队列
+	Link_graphic *front,*tail;//头尾结点指针
+}Queue;
+
+void init(Queue *&queue)//队列初始化
+{
+	queue->front=NULL;
+	queue->tail=NULL;
+}
+void enqueue(Queue *& queue,int value)//入队列操作
+{
+	if(queue->front==NULL && queue->tail==NULL){//当队列中还没有元素的时候
+		pLink_graphic ls=new Link_graphic;
+		ls->value=value;
+		ls->next=NULL;
+		queue->front=ls;
+		queue->tail=ls;
+	}else{
+		pLink_graphic ls=new Link_graphic;
+		ls->value=value;
+		ls->next=NULL;
+		queue->tail->next=ls;
+		queue->tail=ls;
+	}
+}
+
+void dequeue(Queue *&queue)//出队列操作
+{
+	if(queue->front){
+		pLink_graphic pt=queue->front;
+		queue->front=queue->front->next;
+		delete pt;
+	}
+}
+
 void add_vertex(pLink_graphic &plg,pLink_graphic plgtmp)//添加结点
 {
 	pLink_graphic tmp=plg->next;
@@ -93,7 +128,7 @@ void topologic_dfs_visit(pLink_graphic *&plg,int value,bool *visited,int *dist,i
 	depth=depth+1;
 	dist[value]=depth;//更新距离值
 }
-void topologic_depthth_first_search(pLink_graphic *&plg,int *dist,int n)//深度优先搜索,并返回距离最大的结点的下标索引值
+void topologic_depth_first_search(pLink_graphic *&plg,int *dist,int n)//深度优先搜索,并返回距离最大的结点的下标索引值
 {
 	bool *visited=new bool[n];
 	for(int i=0;i<n;++i){
@@ -115,14 +150,13 @@ void topological_sort(pLink_graphic *& plg,int n)//拓扑排序
 	for(int i=0;i<n;++i){
 		dist[i]=0;
 	}
-	topologic_depthth_first_search(plg,dist,n);//深度优先遍历	
+	topologic_depth_first_search(plg,dist,n);//深度优先遍历	
 	for(int i=0;i<n;++i){
 		cout<<dist[i]<<" ";
 	}
 	cout<<endl;
 	delete [] dist;
 }
-
 int in_degree(pLink_graphic *&plg,int value,int n)//入度
 {
 	pLink_graphic plgtmp;
@@ -180,6 +214,40 @@ void break_isolated(pLink_graphic *&plg,int n)//打破孤立的点
 		}
 	}
 }
+void topologic_sort_iterator(pLink_graphic *&plg,int n)//另一种，迭代方式的拓扑排序
+{
+	int *indegree=new int[n];//in_degree数组
+	Queue *queue=new Queue;
+	init(queue);
+	for(int i=0;i<n;++i){
+		indegree[i]=in_degree(plg,i,n);//计算每个点的入度
+		if(indegree[i]==0){
+			enqueue(queue,i);//如果该点的入度为0，则将其加入队列
+		}
+	}
+	while(queue->front){//队列非空,将front元素出队列，并将与其想连的元素的入度减少1
+		pLink_graphic plt=plg[queue->front->value]->next;
+		while (plt){//与queue->front想连的元素的入度值都要减少1
+			indegree[plt->value]--;
+			if(indegree[plt->value]==0){
+				enqueue(queue,plt->value);
+			}
+			plt=plt->next;
+		}
+		cout<<queue->front->value<<" ";
+		dequeue(queue);// 弹出队列首元素
+	}
+	for(int i=0;i<n;++i){
+		if(indegree[i]!=0){
+			cout<<"there is a cycle..."<<endl;
+			return;
+		}
+	}
+	delete []indegree;
+	delete queue;
+}
+
+
 
 int main()
 {
@@ -240,9 +308,12 @@ int main()
 		}
 		cout<<endl;
 	}
-	cout<<"after topological sort"<<endl;
+	cout<<"after recursive topological sort"<<endl;
 	topological_sort(plg,n);
-
+	cout<<endl;
+	cout<<"after iterator topological sort"<<endl;
+	topologic_sort_iterator(plg,n);
+	cout<<endl;
 	for(int i=0;i<n;++i){
 		delete[]plg[i];
 	}
