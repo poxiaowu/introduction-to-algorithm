@@ -302,6 +302,10 @@ void strongly_connected_components(pLink_graphic *&plg,int n)//强连通分量
 	delete []dist;	
 	delete []dec;
 	delete [] visited;
+	for(int i=0;i<n;++i){
+		delete[]plgtranspose[i];
+	}
+	delete[]plgtranspose;
 }
 
 int main()
@@ -373,8 +377,7 @@ int main()
 	cout<<"after iterator topological sort"<<endl;
 	topologic_sort_iterator(plg,n);
 	cout<<endl;
-	strongly_connected_components(plg,n);//强连通分量
-	
+	strongly_connected_components(plg,n);//强连通分量	
 
 	for(int i=0;i<n;++i){
 		delete[]plg[i];
