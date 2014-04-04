@@ -1,16 +1,29 @@
 #include<iostream>
 #include <limits>
+#include<ctime>
 using namespace std;
 
 void recursive_activity_selector(int *s,int *f,int l,int h)//递归贪心算法
 {
 	int m=l+1;
-	while (m<=h && s[m]<f[l]){
+	while (m<h && s[m]<f[l]){
 		++m;
 	}
 	if(m<h){
 		cout<<m<<"\t";
 		recursive_activity_selector(s,f,m,h);
+	}
+}
+
+void recursive_activity_selector_reverse(int *s,int *f,int l,int h)//从活动开始时间比较晚的活动开始选择
+{
+	int m=h-1;
+	while (m>l &&f[m]>s[h]){
+		--m;
+	}
+	if(m>l){
+		cout<<m<<"\t";
+		recursive_activity_selector_reverse(s,f,l,m);
 	}
 }
 
@@ -64,11 +77,12 @@ int compare (const void * a, const void * b)
 
 int main()
 {
+	srand((unsigned)time(NULL));
 	int n=20;
 	int *s=new int[n];
 	int *f=new int[n];
-	/*s[0]=0,s[1]=1,s[2]=3,s[3]=0,s[4]=5,s[5]=3,s[6]=5,s[7]=6,s[8]=8,s[9]=8,s[10]=2,s[11]=12,s[12]=numeric_limits<int>::max();	
-	f[0]=0,f[1]=4,f[2]=5,f[3]=6,f[4]=7,f[5]=9,f[6]=9,f[7]=10,f[8]=11,f[9]=12,f[10]=14,f[11]=16,f[12]=numeric_limits<int>::max();*/
+	//s[0]=0,s[1]=1,s[2]=3,s[3]=0,s[4]=5,s[5]=3,s[6]=5,s[7]=6,s[8]=8,s[9]=8,s[10]=2,s[11]=12,s[12]=numeric_limits<int>::max();	
+	//f[0]=0,f[1]=4,f[2]=5,f[3]=6,f[4]=7,f[5]=9,f[6]=9,f[7]=10,f[8]=11,f[9]=12,f[10]=14,f[11]=16,f[12]=numeric_limits<int>::max();
 	s[0]=0,f[0]=0,s[n-1]=numeric_limits<int>::max(),f[n-1]=numeric_limits<int>::max();
 	for(int i=1;i<n-1;++i){
 		s[i]=rand()%101;
@@ -98,6 +112,8 @@ int main()
 		r[i]=0;
 	}
 	recursive_activity_selector(s,f,0,n-1);
+	cout<<endl;
+	recursive_activity_selector_reverse(s,f,0,n-1);
 	cout<<endl;
 	greedy_activity_selector(s,f,n-1);
 	cout<<endl;
