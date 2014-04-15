@@ -46,9 +46,7 @@ void BTree_split_child(pBTNode &tree,int pos)//tree结点的pos子结点已满
 	}
 	if(!py->leaf){//如果y结点不是叶子结点
   		for(int i=0;i<=pz->keyNum;++i){//存放子结点
-			//pz->children[i]=new BTNode;
 			pz->children[i]=py->children[BTree_T+i];
-			//delete py->children[BTree_T+i];
 			py->children[BTree_T+i]=NULL;
 		}		
 	}
