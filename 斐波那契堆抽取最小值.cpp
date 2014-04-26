@@ -5,7 +5,7 @@ using namespace std;
 typedef struct fib_heap_node{//斐波那契堆结点
 	int key;//结点值
 	int degree;//结点度
-	fib_heap_node *parent;//结点的父结点
+	//fib_heap_node *parent;//结点的父结点
 	fib_heap_node *left;//结点的左兄弟,循环双链表
 	fib_heap_node *right;//结点的右兄弟
 	fib_heap_node *child;//结点的子结点,会使用双向链表链接
@@ -22,7 +22,7 @@ pfib_heap_node fib_heap_node_init(int key)//创建新的结点并初始化
 	pfib_heap_node fib=new fib_heap_node;
 	fib->key=key;
 	fib->degree=0;
-	fib->parent=NULL;
+	//fib->parent=NULL;
 	fib->left=NULL;
 	fib->right=NULL;
 	fib->child=NULL;
@@ -122,7 +122,7 @@ void consolidate(pfib_heap &fib)//合并斐波拉契根链表
 	pfib_heap_node pfirst=fib->min;//链表头元素，以此判断链表是否循环完毕
 	do{
 		degree=pfhn->degree;//结点的度		
-		while(A[degree]){//如果该度的结点存在
+		while(A[degree]&&A[degree]!=pfhn){//如果该度的结点存在,当A[degree]==pfhn时，所有的结点都已合并完成不需要继续合并，否则会自己合并自己
 			py=A[degree];
 			if(pfhn->key>py->key){//交换2个指针
 				ptmp=py;
@@ -141,8 +141,8 @@ void consolidate(pfib_heap &fib)//合并斐波拉契根链表
 			++degree;
 		}
 		A[degree]=pfhn;
-
-	}while((pfhn!=pfirst) && (pfhn=pfhn->right));
+		pfhn=pfhn->right;
+	}while(pfhn!=pfirst );
 	fib->min=NULL;
 
 	ptmp=pfirst->right;
@@ -198,8 +198,8 @@ pfib_heap_node fib_heap_extract_min(pfib_heap &fib)//斐波那契堆的最小结
 		pf_node->right->left=pf_node->left;
 
 		if(pf_node==pf_node->right){
+			--fib->node_num;		
 			fib->min=NULL;
-			--fib->node_num;
 		}else{
 			fib->min=pf_node->right;
 			--fib->node_num;
@@ -214,9 +214,9 @@ int main()
 	srand((unsigned)time(NULL));
 	int n=20;
 	pfib_heap fib;//斐波那契堆
+	int v1[2]={33,45};
 	fib_heap_init(fib);
 	int key;
-	//int v1[5]={18,47,5,23,81};
 	for(int i=0;i<n;++i){
 		key=rand()%100+1;
 		//key=v1[i];
@@ -226,7 +226,7 @@ int main()
 	cout<<endl;
 	pfib_heap fibb;//斐波那契堆
 	fib_heap_init(fibb);
-	//int v2[5]={78,43,13,89,90};
+	int v2[2]={64,95};
 	for(int i=0;i<n;++i){
 		key=rand()%100+1;
 		//key=v2[i];
