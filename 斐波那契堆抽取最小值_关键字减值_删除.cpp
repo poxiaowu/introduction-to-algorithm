@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <ctime>
+#include <limits>
 using namespace std;
 typedef struct fib_heap_node{//斐波那契堆结点
 	int key;//结点值
@@ -304,6 +305,11 @@ void fib_heap_decrease_key(pfib_heap &fib,pfib_heap_node px,int key)//关键字�
 	}
 }
 
+void fib_heap_delete(pfib_heap &fib,pfib_heap_node px)
+{
+	fib_heap_decrease_key(fib,px,numeric_limits<int>::min());//将结点值变为最小值
+	fib_heap_extract_min(fib);//删除结点值
+}
 
 int main()
 {
@@ -346,16 +352,16 @@ int main()
 	cout<<endl;
 	pfib_heap_node fhn=NULL;
 	int v3=0;
-	for(int i=0;i<200;++i){
+	for(int i=0;i<20;++i){
 		key = rand()%100+1;
 		fhn=fib_heap_search(result,result->min,key);//查找结点，并返回
 		if(fhn){//如果找到结点			
-			cout<<"decrese the key  "<<key;
-			key-=(rand()%key+1);
-			cout<<" to "<<key<<endl;
-			fib_heap_decrease_key(result,fhn,key);//将结点值减小
+			cout<<"delete the key  "<<key<<endl;
+			fib_heap_delete(result,fhn);//将结点值减小
 		}else{
-			//cout<<"node "<<key<<" was not founded"<<endl;
+			cout<<"node "<<key<<" was not founded"<<endl;
 		}
 	}
+	fib_heap_print(result,result->min);
+	cout<<endl;
 }
