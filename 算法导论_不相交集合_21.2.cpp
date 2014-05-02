@@ -35,7 +35,7 @@ char find_set(pQueue *pq,map<char,int> ma,char c)//查找结点所属的集合
 
 void union_dis(pQueue &px,pQueue &py,map<char,int>& ma)//合并两个集合
 {
-	if(px && py){
+	if(px && py && px!=py){
 		int x_num=px->size,y_num=py->size;
 		if(x_num<y_num){
 			pQueue tmp=py;
