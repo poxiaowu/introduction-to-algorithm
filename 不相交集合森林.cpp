@@ -5,6 +5,7 @@ using namespace std;
 typedef struct disjoint_set_forest_node{
 	int value;//结点值
 	disjoint_set_forest_node *parent;//父亲结点
+	disjoint_set_forest_node *next;//next结点，形成单向循环链表
 	int rank;//结点的秩
 }disjoint_set_forest_node,*pDisjoint_set_forest_node;
 
@@ -14,6 +15,7 @@ pDisjoint_set_forest_node make_set(int value)
 	pdfn->rank=0;
 	pdfn->parent=pdfn;
 	pdfn->value=value;
+	pdfn->next=pdfn;//单向循环链表
 	return pdfn;
 }
 
@@ -54,11 +56,25 @@ void link(pDisjoint_set_forest_node px,pDisjoint_set_forest_node py)//合并2个
 			++px->rank;
 		}
 	}
+	pDisjoint_set_forest_node ptmp=py->next;//连接两个单向循环链表，形成一个大的单向循环链表
+	py->next=px->next;
+	px->next=ptmp;
 }
 
 void union_dis(int x,int y,map<int,pDisjoint_set_forest_node>ma)//合并两颗树
 {
 	link(find_set(ma,x),find_set(ma,y));
+}
+
+void print_set(map<int,pDisjoint_set_forest_node>ma,int x)// 打印结点信息
+{
+	pDisjoint_set_forest_node pt=ma[x];
+	pDisjoint_set_forest_node ptmp=pt;
+	do{
+		cout<<ptmp->value<<" ";
+		ptmp=ptmp->next;
+	}while(pt!=ptmp);
+	cout<<endl;
 }
 
 int main()
@@ -81,6 +97,9 @@ int main()
 	union_dis(0,9,ma);		
 	cout<<find_set(ma,10)->value<<endl;
 	cout<<find_set(ma,15)->value<<endl;
+	for(int i=0;i<n;++i){
+		print_set(ma,i);
+	}
 	for(int i=0;i<n;++i){
 		delete ma[i];
 	}
