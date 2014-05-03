@@ -17,13 +17,32 @@ pDisjoint_set_forest_node make_set(int value)
 	return pdfn;
 }
 
-pDisjoint_set_forest_node find_set(map<int,pDisjoint_set_forest_node>ma,int key)
+pDisjoint_set_forest_node find_set(map<int,pDisjoint_set_forest_node>ma,int key)//递归版本
 {
 	if(ma[key]!=ma[key]->parent){
 		ma[key]->parent=find_set(ma,ma[key]->parent->value);
 	}
 	return ma[key]->parent;
 }
+
+pDisjoint_set_forest_node find_set_iterator(map<int,pDisjoint_set_forest_node>ma,int key)//非递归版本
+{
+	pDisjoint_set_forest_node pdfn=ma[key];
+	while(pdfn!=pdfn->parent){
+		pdfn=pdfn->parent;		
+	}//找根结点
+
+	pDisjoint_set_forest_node pt=ma[key];
+	pDisjoint_set_forest_node ptmp=pt;
+
+	while(ptmp!=pdfn){
+		ptmp=ptmp->parent;
+		pt->parent=pdfn;
+		pt=ptmp;
+	}
+	return pdfn;
+}
+
 
 void link(pDisjoint_set_forest_node px,pDisjoint_set_forest_node py)//合并2个结点
 {
