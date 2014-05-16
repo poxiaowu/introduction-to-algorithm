@@ -69,6 +69,17 @@ int extract_min(pVertex *pv,int& heap_size)//提取最小值
 	return min;
 }
 
+void heap_decrease_key(pVertex *pv,int i)//元素值发生改变，调整该元素值
+{
+	while(i>=0 && pv[i]->distance<pv[(i-1)/2]->distance){
+		pVertex ph=pv[i];
+		pv[i]=pv[(i-1)/2];
+		pv[(i-1)/2]=ph;
+		i=(i-1)/2;
+	}
+}
+
+
 map<char,pAdj_list> adjacent_link_list(pVertex *pv,pEdge *pe,int e_m,int n)//创建邻接链表
 {
 	pAdj_list *pal=new pAdj_list[n];
@@ -125,10 +136,10 @@ void MST_prim(pGraphic pg,map<char,pAdj_list> all,map<char,pVertex>ma,int v_n,in
 	pt->distance=0;
 	heap_sort(pg->V,v_n);//堆排序
 
-	/*for(int i=0;i<heap_size;++i){
+	for(int i=0;i<heap_size;++i){
 		cout<<pg->V[i]->key<<"\t";
 	}
-	cout<<endl;*/
+	cout<<endl;
 
 	pAdj_list pa;
 	while(heap_size>0){
@@ -151,11 +162,22 @@ void MST_prim(pGraphic pg,map<char,pAdj_list> all,map<char,pVertex>ma,int v_n,in
 			if(ex &&  pa->weight < ma[pa->ch]->distance){
 				ma[pa->ch]->parent=ma[u];
 				ma[pa->ch]->distance=pa->weight;
+				int i;
+				for(i=0;i<heap_size;++i){
+					if(pa->ch==pg->V[i]->key){//当然，此处可以使用更快的其他方法来进行定位
+						break;
+					}
+				}
+				heap_decrease_key(pg->V,i);//调整元素值
+				/*for(int i=0;i<heap_size;++i){
+					cout<<pg->V[i]->key<<"\t";
+				}
+				cout<<endl;*/
 			}
 			pa=pa->next;
 		}
-		heap_sort(pg->V,heap_size);//调整堆元素的大小
-		/*for(int i=0;i<heap_size;++i){
+		//heap_sort(pg->V,heap_size);//调整堆,此处可以使用decrease_key函数操作
+	/*	for(int i=0;i<heap_size;++i){
 			cout<<pg->V[i]->key<<"\t";
 		}
 		cout<<endl;*/
