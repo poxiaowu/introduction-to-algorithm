@@ -123,6 +123,7 @@ void print(int **result,int **pre_matrix,int n)
 				cout<<"from node "<<i<<" to "<<j<<" : ";
 				if(result[i][j]!=numeric_limits<int>::max()){
 					print_short_paths(pre_matrix,i,j);
+					cout<<j;
 				}else{
 					cout<<"no paths exist";
 				}
@@ -172,7 +173,7 @@ int main()
 		cout<<endl;
 	}
 	cout<<endl;
-	print(mat,pre_matrix,n);
+	print(result,pre_matrix,n);
 	for(int i=0;i<n;++i){
 		delete [] mat[i];
 		delete [] result[i];
