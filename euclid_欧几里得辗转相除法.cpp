@@ -11,6 +11,16 @@ int euclid(int a,int b)//欧几里得辗转相除法
 	}	
 }
 
+int euclid_iterator(int a,int b)//欧几里得辗转相除，迭代算法
+{
+	int tmp;
+	while(b){
+		tmp=b;
+		b=a % b;
+		a=tmp;
+	}
+	return a;
+}
 
 void extended_euclid(int a,int b,int &gcd,int &x,int &y)
 {
@@ -27,9 +37,10 @@ void extended_euclid(int a,int b,int &gcd,int &x,int &y)
 
 int main()
 {
-	int a=99;
-	int b=78;
+	int a=899;
+	int b=493;
 	cout<<euclid(a,b)<<endl;
+	cout<<euclid_iterator(a,b)<<endl;
 	int gcd=0,x=0,y=0;
 	extended_euclid(a,b,gcd,x,y);
 }
