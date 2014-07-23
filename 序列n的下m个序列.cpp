@@ -13,8 +13,8 @@ void nextpermutation(int *arr,int n)
 		return;
 	}
 	int mp=index;
-	for(int i=index;i<n;++i){
-		if(arr[i]>=arr[index-1] &&arr[i]<=arr[mp]){
+	for(int i=index+1;i<n;++i){
+		if(arr[i]>arr[index-1] &&arr[i]<arr[mp]){
 			mp=i;	
 		}
 	}
