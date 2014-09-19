@@ -86,8 +86,8 @@ void rb_tree_insert_fixup(pRBNode &pn,pRBNode pz)//红黑结点修复
 				binary_tree_left_rotation(pn,pz->parent->parent);
 			}			
 		}
-		pn->rb=0;
 	}
+	pn->rb=0;
 }
 
 void binary_tree_insert(pRBNode &pn,pRBNode pz)
